@@ -7,6 +7,9 @@ protocol Tracking {
     var enteredAt: TimeInterval { get }
     func eventOccurred(event: String)
     func eventOccurred(event: String, parameters: [String: Any])
+    func setUser(userId: String)
+    func setUserProperty(key: String, value: String)
+    
     func sendTrackingResult()
     func applicationWillResignActiveAt(screenTag: String)
     func applicationWillTerminateAt(screenTag: String)
