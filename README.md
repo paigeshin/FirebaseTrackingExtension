@@ -2,6 +2,16 @@
 
 ```swift
 
+//
+//  Tracking.swift
+//  MiracleNight
+//
+//  Created by paige on 2022/04/14.
+//
+
+import SwiftUI
+import FirebaseAnalytics
+
 protocol Tracking {
     var tag: String { get }
     var enteredAt: TimeInterval { get }
@@ -11,10 +21,6 @@ protocol Tracking {
     func setUserProperty(key: String, value: String)
     
     func sendTrackingResult()
-    func applicationWillResignActiveAt(screenTag: String)
-    func applicationWillTerminateAt(screenTag: String)
-    func applicationWillEnterForground(screenTag: String)
-    func applicationDidBecomeActive(screenTag: String)
 }
 
 // MARK: - USER PROPERTY
@@ -154,16 +160,16 @@ extension View where Self: Tracking {
     func tracking() -> some View {
         self
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
-                applicationWillResignActiveAt(screenTag: tag)
+                willResignActiveNotification(screenTag: tag)
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification, object: nil)) { _ in
-                applicationWillTerminateAt(screenTag: tag)
+                willTerminateNotification(screenTag: tag)
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
-                applicationWillEnterForground(screenTag: tag)
+                willEnterForegroundNotification(screenTag: tag)
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
-                rootViewController.applicationDidBecomeActive(screenTag: tag)
+                didBecomeActiveNotification(screenTag: tag)
             }
             .onDisappear {
                 sendTrackingResult()
@@ -171,6 +177,7 @@ extension View where Self: Tracking {
     }
     
 }
+
 
 ```
 
